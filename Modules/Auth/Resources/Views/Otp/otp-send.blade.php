@@ -44,6 +44,7 @@
                         📩 Send OTP
                     </button>
                 </form>
+                <a href="{{ route('login') }}" class="btn btn-secondary w-100 mt-3">🔙 Go Back Login</a>
             </div>
         </div>
     </div>
