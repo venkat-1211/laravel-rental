@@ -139,8 +139,8 @@
     @if($property->testimonials->isNotEmpty())
         <div class="mb-5">
             <h5 class="fw-bold mb-3">Testimonials</h5>
-            @foreach($property->testimonials as $testimonial)
-                <div class="testimonial-box p-3 rounded shadow-sm mb-3">
+            @foreach($property->testimonials as $index => $testimonial)
+                <div class="testimonial-box p-3 rounded shadow-sm mb-3 review-item" style="{{ $index >= 3 ? 'display: none;' : '' }}">
                     <div class="d-flex align-items-center gap-3 mb-2">
                         <img src="{{ $testimonial->user->profile->profile_image }}" class="rounded-circle" width="45" height="45" alt="User">
                         <div>
@@ -155,6 +155,10 @@
                     <p class="mb-0 text-muted fst-italic">{{ $testimonial->description }}</p>
                 </div>
             @endforeach
+            <!-- Load More Button -->
+            <div class="text-center mt-4">
+                <button id="loadMoreBtn" class="btn btn-warning px-4">View More Testimonials ...</button>
+            </div>
         </div>
     @else
         <h5 class="fw-bold mb-3">Testimonials</h5>
@@ -175,4 +179,38 @@
     </div>
 
 </div>
+@endsection
+
+@section('scripts')
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const propertyItems = document.querySelectorAll('.review-item');
+    let visibleCount = 3; // First 3 items shown
+
+      // Hide the button if items are less than or equal to visibleCount
+      if (propertyItems.length <= visibleCount) {
+        loadMoreBtn.style.display = 'none';
+      }
+
+      propertyItems.forEach((item, index) => {
+        item.style.display = index < visibleCount ? 'block' : 'none';
+      });
+
+    loadMoreBtn.addEventListener('click', function () {
+      visibleCount += 6; // Increase by 6 each click
+
+      propertyItems.forEach((item, index) => {
+        if (index < visibleCount) {
+          item.style.display = 'block';
+        }
+      });
+
+      // Hide button if all properties are visible
+      if (visibleCount >= propertyItems.length) {
+        loadMoreBtn.style.display = 'none';
+      }
+    });
+  });
+</script>
 @endsection
