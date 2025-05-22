@@ -55,6 +55,13 @@
                         @enderror
                     </div>
 
+                    <!-- 🔁 Beautifully Styled Forgot Password Link -->
+                    <div class="mb-3 text-end">
+                        <a href="" class="text-decoration-none text-primary fw-semibold small">
+                            <i class="bi bi-key"></i> Forgot Password?
+                        </a>
+                    </div>
+
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">
                             👤 Login
