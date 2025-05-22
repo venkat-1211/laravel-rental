@@ -32,7 +32,7 @@
         }
         .card {
             border-radius: 12px;
-        }
+        }   
     </style>
 </head>
 <body>
