@@ -1,0 +1,51 @@
+@extends('auth::layouts.master')
+
+@section('title', 'Send OTP')
+
+@section('content')
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6">
+        <div class="card shadow fade-in">
+            <div class="card-body p-5">
+                <h3 class="mb-4 text-center text-primary fw-bold">🔐 Verify with OTP</h3>
+
+                <!-- Validation Errors -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- OTP Form -->
+                <form method="POST" action="{{ route('otp.send') }}">
+                    @csrf
+
+                    <div class="mb-4">
+                        <label for="identifier" class="form-label fw-semibold">Phone Number or Email</label>
+                        <input 
+                            type="text" 
+                            name="identifier" 
+                            id="identifier" 
+                            class="form-control @error('identifier') is-invalid @enderror"
+                            placeholder="Enter your phone or email" 
+                            value="{{ old('identifier') }}"
+                            required
+                        >
+                        @error('identifier')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        📩 Send OTP
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -1,0 +1,28 @@
+<div class="sidebar d-flex flex-column">
+    @role(['super_admin', 'admin'])
+        <div class="text-center mb-4">
+        <h4 class="fw-bold">@headline(optional(auth()->user()->roles->first())->name) Panel</h4>
+        </div>
+    @endrole
+      <a href="{{ route('dashboard') }}" class="@activeLink('dashboard', 'make.booking', 'property.details')"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    @role('super_admin')
+      <a href="{{ route('manage.admins') }}" class="@activeLink('manage.admins')"><i class="bi bi-person-badge-fill"></i> Manage Subadmins</a>
+    @endrole
+    @role(['super_admin', 'admin'])
+      <a href="{{ route('manage.properties') }}" class="@activeLink('manage.properties', 'property.amenities', 'property.images', 'property.pricings')"><i class="bi bi-house-door-fill"></i> Manage Properties</a>
+      <a href="{{ route('manage.amenities') }}" class="@activeLink('manage.amenities')"><i class="bi bi-building-fill"></i>Manage Amenities</a>
+      <a href="{{ route('manage.special.days') }}" class="@activeLink('manage.special.days')"><i class="bi bi-calendar-fill"></i>Manage Special Days</a>
+      <a href="{{ route('manage.coupons') }}" class="@activeLink('manage.coupons')"><i class="bi bi-ticket-fill"></i>Manage Coupons</a>
+      <a href="{{ route('manage.testimonials') }}" class="@activeLink('manage.testimonials')"><i class="bi bi-star-fill"></i>Manage Testimonials</a>
+      <a href="{{ route('manage.faqs') }}" class="@activeLink('manage.faqs')"><i class="bi bi-question-circle-fill"></i>Manage FAQs</a>
+    @endrole
+    <a href="{{ route('manage.bookings') }}" class="@activeLink('manage.bookings')"><i class="bi bi-calendar-event-fill"></i> Manage Bookings</a>
+    <a href="{{ route('profile') }}" class="@activeLink('profile')"><i class="bi bi-person-circle"></i> Profile</a>
+    <a href="{{ route('logout') }}"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+       <i class="bi bi-box-arrow-left"></i> Logout</a>
+
+      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+      </form>
+</div>
