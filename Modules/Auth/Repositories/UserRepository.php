@@ -434,7 +434,7 @@ class UserRepository implements UserRepositoryInterface
         ]);
 
         $customize_profile_data = [
-            'profile_image' => isset($profileImagePath) ? $profileImagePath : auth()->user()->profile->profile_image,
+            'profile_image' => isset($profileImagePath) ? $profileImagePath : basename(auth()->user()->profile->profile_image),
             'phone' => $profile_data->get('phone'),
             'address' => [
                 'flat' => $profile_data->get('flat'),
