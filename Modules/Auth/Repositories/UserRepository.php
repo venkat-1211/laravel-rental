@@ -20,9 +20,10 @@ class UserRepository implements UserRepositoryInterface
     public function otpSend($request, $handler)
     {
         $otp = CommonHelper::generate();
-        $data = GenericFormData::fromRequest($request, ['identifier'], ['otp' => $otp, 'type' => 'register', 'expires_at' => now()->addMinutes(5)]);
-        $otpSend = $handler->updateOrCreate($data, 'Auth', 'Otp', ['identifier' => $request->identifier]);
+        $data = GenericFormData::fromRequest($request, ['identifier', 'type'], ['otp' => $otp, 'expires_at' => now()->addMinutes(5)]);
+        $otpSend = $handler->updateOrCreate($data, 'Auth', 'Otp', ['identifier' => $request->identifier, 'type' => $request->type]);
         session(['identifier' => Crypt::encrypt($request->identifier)]);
+        session(['otp-type' => Crypt::encrypt($request->type)]);
 
         return redirect()->route('otp.verify.form')->with('success', 'OTP sent successfully!');
 
@@ -33,6 +34,7 @@ class UserRepository implements UserRepositoryInterface
         $data = GenericFormData::fromRequest($request, ['otp']);
 
         $identifier = Crypt::decrypt(session('identifier'));
+        $type = Crypt::decrypt(session('otp-type'));
 
         $otp_verify = Otp::where('otp', $data->get('otp'))->where('identifier', $identifier)->first();
         $this->updateOtpVerify($otp_verify);
@@ -43,13 +45,18 @@ class UserRepository implements UserRepositoryInterface
             'otp' => ['Invalid OTP!'],
         ]));
 
-        return redirect()->route('register.form')->with('success', 'OTP verified successfully!');
+        if ($type === 'register') {
+            return redirect()->route('register.form')->with('success', 'OTP verified successfully!');
+        } elseif ($type === 'forgot') {
+            return redirect()->route('forgot.form')->with('success', 'OTP verified successfully!');
+        }
 
     }
 
     private function updateOtpVerify($model)
     {
-        $model->update(['is_verified' => true]);
+        isset($model) ? $model->update(['is_verified' => true]) : null;
+        // $model->update(['is_verified' => true]);
     }
 
     public function register($request, $handler)
@@ -76,11 +83,7 @@ class UserRepository implements UserRepositoryInterface
         $password = $data->get('password');
 
         // Find user by email or related profile.phone
-        $user = User::where('email', $identifier)
-            ->orWhereHas('profile', function ($query) use ($identifier) {
-                $query->where('phone', $identifier);
-            })
-            ->first();
+        $user = $this->emailAndPhoneCheck($identifier);
 
         if (! $user || ! Auth::attempt(['email' => $user->email, 'password' => $password])) {
             return back()->with('error', 'Invalid credentials.');
@@ -479,5 +482,32 @@ class UserRepository implements UserRepositoryInterface
         $user = $handler->update($final_data, auth()->user());
 
         return redirect()->route('profile')->with('success', 'Password updated successfully!');
+    }
+
+    // Forgot Password
+    public function forgot($request, $handler)
+    {
+        $user_data = GenericFormData::fromRequest($request, ['password']);
+        $customize_user_data = ['password' => $user_data->get('password')];
+        $final_data = GenericFormData::fromArray($customize_user_data);
+
+        $identifier = Crypt::decrypt(session('identifier'));
+        // Find user by email or related profile.phone
+        $user = $this->emailAndPhoneCheck($identifier);
+
+        $user = $handler->update($final_data, $user);
+
+        return redirect()->route('login')->with('success', 'Password updated successfully!');
+    }
+
+    public function emailAndPhoneCheck($identifier)
+    {
+        $user = User::where('email', $identifier)
+        ->orWhereHas('profile', function ($query) use ($identifier) {
+            $query->where('phone', $identifier);
+        })
+        ->first();
+
+        return $user;
     }
 }

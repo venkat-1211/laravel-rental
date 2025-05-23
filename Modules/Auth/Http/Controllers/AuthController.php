@@ -9,6 +9,7 @@ use Modules\Auth\Http\Requests\OtpSendRequest;
 use Modules\Auth\Http\Requests\OtpVerifyRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Http\Requests\ResetPasswordRequest;
+use Modules\Auth\Http\Requests\ForgotPasswordRequest;
 use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
 use Modules\Shared\Actions\HandleFormSubmission;
 
@@ -48,9 +49,19 @@ class AuthController extends Controller
         return view('auth::register');
     }
 
+    public function forgotForm()
+    {
+        return view('auth::forgot');
+    }
+
     public function register(RegisterRequest $request, HandleFormSubmission $handler)
     {
         return $this->userRepository->register($request, $handler);
+    }
+
+    public function forgot(ForgotPasswordRequest $request, HandleFormSubmission $handler)
+    {
+        return $this->userRepository->forgot($request, $handler);
     }
 
     public function login(LoginRequest $request)

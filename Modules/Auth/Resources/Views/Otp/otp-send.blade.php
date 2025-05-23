@@ -24,6 +24,8 @@
                 <form method="POST" action="{{ route('otp.send') }}">
                     @csrf
 
+                    <!-- OTP Type -->
+                     <input type="text" name="type" value="register" hidden class="form-control" id="otp-type">
                     <div class="mb-4">
                         <label for="identifier" class="form-label fw-semibold">Phone Number or Email</label>
                         <input 
@@ -50,3 +52,17 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Retrieve OTP Type from Local Storage
+            var type = localStorage.getItem('otp-type');
+            var otpTypeInput = document.getElementById('otp-type');
+            if (otpTypeInput) {
+                otpTypeInput.value = type;
+            }
+            
+        });
+    </script>

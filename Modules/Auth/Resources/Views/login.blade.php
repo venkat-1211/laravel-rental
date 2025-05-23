@@ -57,7 +57,7 @@
 
                     <!-- 🔁 Beautifully Styled Forgot Password Link -->
                     <div class="mb-3 text-end">
-                        <a href="" class="text-decoration-none text-primary fw-semibold small">
+                        <a href="{{ route('otp.form') }}" class="text-decoration-none text-primary fw-semibold small" id="forgot-password-btn">
                             <i class="bi bi-key"></i> Forgot Password?
                         </a>
                     </div>
@@ -71,7 +71,7 @@
                     <div class="text-center mt-3">
                         <small class="text-muted">
                             Don’t have an account?
-                            <a href="{{ route('otp.send') }}" class="text-primary fw-semibold text-decoration-none">
+                            <a href="{{ route('otp.send') }}" class="text-primary fw-semibold text-decoration-none" id="register-btn">
                                 Register here
                             </a>
                         </small>

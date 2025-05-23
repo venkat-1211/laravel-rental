@@ -2,10 +2,9 @@
 
 namespace Modules\Auth\Http\Requests;
 
-use Modules\Auth\Rules\IdentifierExists;
 use Modules\Shared\Http\Requests\BaseFormRequest;
 
-class OtpSendRequest extends BaseFormRequest
+class ForgotPasswordRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +22,8 @@ class OtpSendRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'identifier' => ['required', new IdentifierExists($this->input('type'))],
-            'type' => 'required',
+            'password' => 'required|min:6',
+            'confirm_password' => 'required|same:password',
         ];
     }
 }

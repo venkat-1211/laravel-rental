@@ -84,5 +84,26 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Forget Password Button Click Event
+        var forgotPasswordBtn = document.getElementById("forgot-password-btn");
+        if (forgotPasswordBtn) {
+            forgotPasswordBtn.addEventListener('click', function() {
+                localStorage.setItem('otp-type', 'forgot'); // Store as a string
+            });
+        }
+
+        // Register Button Click Event
+        var registerBtn = document.getElementById("register-btn");
+        if (registerBtn) {
+            registerBtn.addEventListener('click', function() {
+                localStorage.setItem('otp-type', 'register'); // Store as a string
+            });
+        }
+    });
+</script>
+
 </body>
 </html>

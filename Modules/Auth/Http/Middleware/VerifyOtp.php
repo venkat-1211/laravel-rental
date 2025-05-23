@@ -16,7 +16,7 @@ class VerifyOtp
     public function handle(Request $request, Closure $next): Response
     {
         if (! session('otp_verified')) {
-            return redirect()->route('otp.send')->with('error', 'Please verify your otp first!');
+            return redirect()->route('login')->with('error', 'Please verify your otp first!');
         }
 
         return $next($request);

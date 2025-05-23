@@ -17,6 +17,9 @@ Route::middleware(['web'])->group(function () {
     Route::middleware(['otp.verified'])->group(function () {
         Route::get('register', [AuthController::class, 'registerForm'])->name('register.form');
         Route::post('register', [AuthController::class, 'register'])->name('register');
+
+        Route::get('forgot', [AuthController::class, 'forgotForm'])->name('forgot.form');
+        Route::post('forgot', [AuthController::class, 'forgot'])->name('forgot');
     });
 
     Route::middleware(['auth'])->group(function () {
