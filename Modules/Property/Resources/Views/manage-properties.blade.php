@@ -689,6 +689,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route("manage.properties") }}',
+                // pageLength: 5, // 👈 Show 5 records per page
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'property_info', name: 'name, address, propertyType.name' },
